@@ -222,9 +222,9 @@ const AdminDashboard = () => {
                         <input
                           type="radio"
                           id="multi"
-                          value="multi"
+                          value="multi-round"
                           checked={newElection.type === "multi-round"}
-                          onChange={() => setNewElection({ ...newElection, type: "multi-round" })}
+                          onChange={() => setNewElection({ ...newElection, type: "multi-round" as "single" | "multi-round"})}
                           className="mr-2"
                         />
                         <Label htmlFor="multi">Multi-Round</Label>
