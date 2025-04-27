@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getElections, createElection, Election } from "@/services/electionService";
@@ -14,6 +13,8 @@ import { Loader2, Plus, Calendar, Users, AlertTriangle, CheckCircle2 } from "luc
 import Navbar from "@/components/Navbar";
 import { toast } from "sonner";
 
+type ElectionType = "single" | "multi-round";
+
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [elections, setElections] = useState<Election[]>([]);
@@ -23,7 +24,7 @@ const AdminDashboard = () => {
     description: "",
     startDate: "",
     endDate: "",
-    type: "single" as const
+    type: "single" as ElectionType
   });
   const [creatingElection, setCreatingElection] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -82,7 +83,7 @@ const AdminDashboard = () => {
       description: "",
       startDate: "",
       endDate: "",
-      type: "single"
+      type: "single" as ElectionType
     });
   };
   
@@ -112,12 +113,10 @@ const AdminDashboard = () => {
     }
   };
   
-  // Calculate stats
   const activeCount = elections.filter(e => e.status === "active").length;
   const upcomingCount = elections.filter(e => e.status === "upcoming").length;
   const completedCount = elections.filter(e => e.status === "completed").length;
 
-  // Calculate total votes (for completed elections)
   const calculateTotalVotes = () => {
     return elections
       .filter(e => e.status === "completed" && e.results)
@@ -224,7 +223,7 @@ const AdminDashboard = () => {
                           id="multi"
                           value="multi-round"
                           checked={newElection.type === "multi-round"}
-                          onChange={() => setNewElection({ ...newElection, type: "multi-round" as "single" | "multi-round"})}
+                          onChange={() => setNewElection({ ...newElection, type: "multi-round" })}
                           className="mr-2"
                         />
                         <Label htmlFor="multi">Multi-Round</Label>
@@ -259,7 +258,6 @@ const AdminDashboard = () => {
           </div>
         </header>
         
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard 
             title="Active Elections"
@@ -290,7 +288,6 @@ const AdminDashboard = () => {
           />
         </div>
         
-        {/* Election Management Tabs */}
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="grid grid-cols-4 w-full max-w-md mb-6">
             <TabsTrigger value="all">All</TabsTrigger>
